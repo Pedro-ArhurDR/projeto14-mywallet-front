@@ -2,14 +2,30 @@ import styled from "styled-components"
 import logo from '../img/MyWallet.png'
 import { Link, useNavigate } from "react-router-dom"
 import { Navigate } from "react-router-dom"
+import { useContext } from "react"
+import MyContext from "../contexts/myContext"
+import dayjs from "dayjs"
 export default function Tela5() {
     const navigate = useNavigate()
+    const {registros,setRegistros,registro,setRegistro,saidas,setSaidas} = useContext(MyContext)
+    function saida(event) {
+        event.preventDefault()
+        setRegistros([...registros,registro])
+        setSaidas(saidas+ parseInt(registro.valor))
+        setRegistro([])
+        navigate('/menu')
+    }
     return (
         <Container>
-            <h1>Nova saída</h1>
-            <input placeholder="Valor" type="number"/>
-            <input placeholder="Descrição" type="text"/>
-            <button onClick={()=>navigate("/menu")}>Salvar Saída</button>
+            <h1>Nova entrada</h1>
+            <form onSubmit={saida}>
+            <input placeholder="Valor" type="number" value={registro.valor} onChange={e=>setRegistro(e2 => ({ ...e2,
+                 valor: e.target.value,data:dayjs().format('DD/MM'),status:'saida'
+                 }))} required/>
+            <input placeholder="Descrição" type="text" value={registro.descricao} 
+            onChange={e=>setRegistro(e2 => ({ ...e2, descricao: e.target.value,data:dayjs().format('DD/MM'),status:'saida' }))} required/>
+            <button type='submit'>Salvar Saída</button>
+            </form>
         </Container>
     )
 }
@@ -24,6 +40,12 @@ const Container = styled.div`
     flex-direction:column;
     h1{
         margin: 30px 0;
+    }
+    form{
+        display:flex;
+        flex-direction: column;
+        align-items:center;
+        justify-content:center;
     }
     button{
         width:328px;

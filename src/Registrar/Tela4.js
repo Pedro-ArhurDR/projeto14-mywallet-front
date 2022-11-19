@@ -2,14 +2,30 @@ import styled from "styled-components"
 import logo from '../img/MyWallet.png'
 import { Link, useNavigate } from "react-router-dom"
 import { Navigate } from "react-router-dom"
+import { useContext } from "react"
+import MyContext from "../contexts/myContext"
+import dayjs from "dayjs"
 export default function Tela4() {
     const navigate = useNavigate()
+    const {registros,setRegistros,registro,setRegistro,entradas,setEntradas} = useContext(MyContext)
+    function entrada(event) {
+        event.preventDefault()
+        setRegistros([...registros,registro])
+        setEntradas(entradas+ parseInt(registro.valor))
+        setRegistro([])
+        navigate('/menu')
+    }
     return (
         <Container>
             <h1>Nova entrada</h1>
-            <input placeholder="Valor" type="number"/>
-            <input placeholder="Descrição" type="text"/>
-            <button onClick={()=>navigate("/menu")}>Salvar Entrada</button>
+            <form onSubmit={entrada}>
+            <input placeholder="Valor" type="number" value={registro.valor} onChange={e=>setRegistro(e2 => ({ ...e2,
+                 valor: e.target.value,data:dayjs().format('DD/MM'),status:'entrada'
+                 }))} required/>
+            <input placeholder="Descrição" type="text" value={registro.descricao} 
+            onChange={e=>setRegistro(e2 => ({ ...e2, descricao: e.target.value,data:dayjs().format('DD/MM'),status:'entrada' }))} required/>
+            <button type='submit'>Salvar Entrada</button>
+            </form>
         </Container>
     )
 }
@@ -24,6 +40,12 @@ const Container = styled.div`
     flex-direction:column;
     h1{
         margin: 30px 0;
+    }
+    form{
+        display:flex;
+        flex-direction: column;
+        align-items:center;
+        justify-content:center;
     }
     button{
         width:328px;

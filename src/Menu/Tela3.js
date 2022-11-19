@@ -2,26 +2,14 @@ import styled from "styled-components"
 import logo from '../img/MyWallet.png'
 import { Link, useNavigate } from "react-router-dom"
 import vector from "../img/Vector.png"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { AddCircleOutline, RemoveCircleOutline } from 'react-ionicons'
+import MyContext from "../contexts/myContext"
 export default function Tela3() {
-        const [registros,setRegistros] = useState([
-            {
-                data:'3/11',
-                descricao:'bala',
-                valor:10,
-                status:'saida',
-            },
-            {
-                data:'3/11',
-                descricao:'bala',
-                valor:10,
-                status:'entrada',
-            }
-        ])
-
-
+    const {registros,setRegistros,entradas,saidas} = useContext(MyContext)
     const navigate = useNavigate()
+    const [saldo,setSaldo ]= useState(entradas-saidas)
+    console.log('saldo final', saldo)
     return (
         <Container>
             <Topo>
@@ -31,6 +19,7 @@ export default function Tela3() {
                 {registros.length===0?<p>Não há registros de entrada ou saída</p>:
                 registros.map((e,i)=><div key={i}> <p>{e.data}</p> <h3>{e.descricao}</h3> <Valor color={e.status==='entrada'?'#03AC00':'#C70000'}>{e.valor}</Valor> </div>)
                 }
+                <Saldo><p>SALDO</p>{saldo>0?<h2>{saldo}</h2>:<h4>{saldo}</h4> }</Saldo>
             </Registros>
             <Botoes>
                 <div onClick={()=>navigate('/entrada')}> <AddCircleOutline color={'#00000'} height="25px "width="25px" /> Nova entrada</div> 
@@ -39,6 +28,8 @@ export default function Tela3() {
         </Container>
     )
 }
+
+
 
 const Container = styled.div`
     background-color:#8C11BE;
@@ -70,6 +61,28 @@ const Valor = styled.h4`
     color: ${props=>props.color};
     font-size: 16px;
 `
+const Saldo = styled.div`
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:absolute;
+width:90%;
+bottom:0;
+left:5%;
+P{
+    font-size: 17px;
+    color: black;
+}
+
+h4{
+    color:#C70000;
+    font-size: 17px;
+}
+h2{
+    color:#03AC00;
+    font-size: 17px;
+}
+`
 
 const Topo = styled.div`
     height:70px;
@@ -89,6 +102,7 @@ const Registros = styled.div`
     padding: 10px;
     display:flex;
     flex-direction: column;
+    position: relative;
     div{
         display:flex;
         justify-content:space-between;
@@ -96,6 +110,7 @@ const Registros = styled.div`
     h3{
         color:black;
     }
+
 `
 
 
