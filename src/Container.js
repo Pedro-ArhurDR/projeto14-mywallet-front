@@ -9,30 +9,13 @@ import MyContext from "./contexts/myContext";
 import { useState } from "react";
 export default function Container() {
     const [registros,setRegistros] = useState([
-        {
-            data:'3/11',
-            descricao:'bala',
-            valor:10,
-            status:'saida',
-        },
-        {
-            data:'3/11',
-            descricao:'bala',
-            valor:10,
-            status:'entrada',
-        }
     ])
     const [registro,setRegistro] = useState([
-        {
-            data:'',
-            descricao:'',
-            valor:0,
-            status:'',
-        }
     ])
     const [log,setLog]= useState({
         email:"",
         senha:"",
+        Bearer:""
     })
     const [cad,setCad]=useState({
         nome:"",
@@ -40,12 +23,11 @@ export default function Container() {
         senha:"",
         senha2:""
     })
-    const [entradas,setEntradas] = useState(0)
-    const [saidas,setSaidas] = useState(0)
-    console.log('entradas', entradas)
-    console.log('saidas', saidas)
+    const [nomeT,setNomeT]=useState('')
+    const [id,setId] = useState('')
+
     return (
-        <MyContext.Provider value={{log,setLog,cad,setCad,registros,setRegistros,registro,setRegistro,entradas,setEntradas,saidas,setSaidas}} >
+        <MyContext.Provider value={{log,setLog,cad,setCad,registros,setRegistros,registro,setRegistro,nomeT,setNomeT,id,setId }} >
         <Global>
             <BrowserRouter>
                 <Routes>

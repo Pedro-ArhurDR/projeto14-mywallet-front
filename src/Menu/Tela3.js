@@ -2,28 +2,59 @@ import styled from "styled-components"
 import logo from '../img/MyWallet.png'
 import { Link, useNavigate } from "react-router-dom"
 import vector from "../img/Vector.png"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { AddCircleOutline, RemoveCircleOutline } from 'react-ionicons'
 import MyContext from "../contexts/myContext"
+import axios from "axios"
+import Saldo from "./Saldo"
 export default function Tela3() {
-    const {registros,setRegistros,entradas,saidas} = useContext(MyContext)
+    const { nomeT, log } = useContext(MyContext)
     const navigate = useNavigate()
-    const [saldo,setSaldo ]= useState(entradas-saidas)
-    console.log('saldo final', saldo)
+    const [records, setRecords] = useState([])
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${log.Bearer}`
+            }
+        }
+        const promise = axios.get(`http://localhost:5000/menu`, config)
+        promise.then(res => console.log(res) & console.log(log.Bearer) & setRecords(res.data)
+        )
+        promise.catch(erro => {
+            console.log(erro)
+        })
+
+    }, [])
+    function exit() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${log.Bearer}`
+            }
+        }
+        const promise = axios.delete(`http://localhost:5000/menu`, config)
+        promise.then(res => console.log(res)& navigate('/')
+        )
+        promise.catch(erro => {
+            console.log(erro.message)
+        })
+    }
+    console.log(log.Bearer)
     return (
         <Container>
             <Topo>
-                Ola, Fulano <img onClick={()=>navigate('/')} src={vector} />
+                Ola, {nomeT} <img onClick={exit} src={vector} />
             </Topo>
             <Registros>
-                {registros.length===0?<p>Não há registros de entrada ou saída</p>:
-                registros.map((e,i)=><div key={i}> <p>{e.data}</p> <h3>{e.descricao}</h3> <Valor color={e.status==='entrada'?'#03AC00':'#C70000'}>{e.valor}</Valor> </div>)
+                {records.length === 0 ? <p>Não há registros de entrada ou saída</p> :
+                    records.map((e, i) => <div key={i}> <p>{e.data}</p> <h3>{e.descricao}</h3>
+                        <Valor color={e.status === 'entrada' ? '#03AC00' : '#C70000'}>
+                            R$ {e.valor}</Valor> </div>)
                 }
-                <Saldo><p>SALDO</p>{saldo>0?<h2>{saldo}</h2>:<h4>{saldo}</h4> }</Saldo>
+                <Saldo records={records} />
             </Registros>
             <Botoes>
-                <div onClick={()=>navigate('/entrada')}> <AddCircleOutline color={'#00000'} height="25px "width="25px" /> Nova entrada</div> 
-                <div onClick={()=>navigate('/saida')}> <RemoveCircleOutline color={'#00000'} height="25px "width="25px" /> Nova saída</div>
+                <div onClick={() => navigate('/entrada')}> <AddCircleOutline color={'#00000'} height="25px " width="25px" /> Nova entrada</div>
+                <div onClick={() => navigate('/saida')}> <RemoveCircleOutline color={'#00000'} height="25px " width="25px" /> Nova saída</div>
             </Botoes>
         </Container>
     )
@@ -32,7 +63,10 @@ export default function Tela3() {
 
 
 const Container = styled.div`
-    background-color:#8C11BE;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
     height:100vh;
     width:100%;
     color:#FFFFFF;
@@ -40,6 +74,17 @@ const Container = styled.div`
     justify-content:center;
     align-items:center;
     flex-direction:column;
+    @keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 
 `
 const Botoes = styled.div`
@@ -49,39 +94,33 @@ const Botoes = styled.div`
     div{
         width:156px;
         height:114px;
-        background-color:#A328D6;
-        display:flex;
-        flex-direction: column;
-        align-items:center;
-        justify-content:center;
-        border-radius: 5px;
+        background-color: #EA4C89;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  touch-action: manipulation;
     }
 `
 const Valor = styled.h4`
-    color: ${props=>props.color};
+    color: ${props => props.color};
     font-size: 16px;
-`
-const Saldo = styled.div`
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:absolute;
-width:90%;
-bottom:0;
-left:5%;
-P{
-    font-size: 17px;
-    color: black;
-}
-
-h4{
-    color:#C70000;
-    font-size: 17px;
-}
-h2{
-    color:#03AC00;
-    font-size: 17px;
-}
 `
 
 const Topo = styled.div`
@@ -109,6 +148,7 @@ const Registros = styled.div`
     }
     h3{
         color:black;
+        font-weight: 300;
     }
 
 `
