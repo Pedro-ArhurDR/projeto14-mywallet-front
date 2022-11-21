@@ -10,7 +10,7 @@ export default function Tela1() {
 
     function login(event) {
         event.preventDefault()
-        const promise = axios.post("http://localhost:5000/", log)
+        const promise = axios.post("https://projeto14-mywallet-back-v3.onrender.com/", log)
         promise.then((res) => res.data.token & console.log(res.data) & setId(res.data.emailExist._id) &
             console.log('LOGADO') & setLog(e2 => ({ ...e2, Bearer: res.data.token })) & setNomeT(res.data.emailExist.nome) & navigate('/menu'))
         promise.catch((err) => alert('Senha e/ou email incorreto(s)'))

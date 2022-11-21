@@ -13,7 +13,7 @@ export default function Tela5() {
     function saida(event) {
         event.preventDefault()
         console.log(registro)
-        const promise = axios.post("http://localhost:5000/saida",registro)
+        const promise = axios.post("https://projeto14-mywallet-back-v3.onrender.com/saida",registro)
         promise.then((res)=>setValor('')&
         setDescricao('')&
         setRegistros([...registros, registro])&

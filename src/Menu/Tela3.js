@@ -17,7 +17,7 @@ export default function Tela3() {
                 Authorization: `Bearer ${log.Bearer}`
             }
         }
-        const promise = axios.get(`http://localhost:5000/menu`, config)
+        const promise = axios.get(`https://projeto14-mywallet-back-v3.onrender.com/menu`, config)
         promise.then(res => console.log(res) & console.log(log.Bearer) & setRecords(res.data)
         )
         promise.catch(erro => {
@@ -31,7 +31,7 @@ export default function Tela3() {
                 Authorization: `Bearer ${log.Bearer}`
             }
         }
-        const promise = axios.delete(`http://localhost:5000/menu`, config)
+        const promise = axios.delete(`https://projeto14-mywallet-back-v3.onrender.com/menu`, config)
         promise.then(res => console.log(res)& navigate('/')
         )
         promise.catch(erro => {

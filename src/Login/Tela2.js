@@ -13,7 +13,7 @@ export default function Tela2() {
             alert('As senha não coincidem')
         }
         else{
-            const promise = axios.post("http://localhost:5000/cadastro",cad)
+            const promise = axios.post("https://projeto14-mywallet-back-v3.onrender.com/cadastro",cad)
         promise.then((res)=>navigate('/') & console.log(res.data)& console.log('cadastrado'))
 
 

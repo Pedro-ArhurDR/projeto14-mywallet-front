@@ -13,7 +13,7 @@ export default function Tela4() {
     const [descricao,setDescricao] =useState('')
     function entrada(event) {
         event.preventDefault()
-        const promise = axios.post("http://localhost:5000/entrada",registro)
+        const promise = axios.post("https://projeto14-mywallet-back-v3.onrender.com/entrada",registro)
         promise.then((res)=>setValor('')&
         setDescricao('')&
         setRegistros([...registros, registro])&
